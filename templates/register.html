@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h1 class="h3 mb-3 font-weight-normal">Register</h1>
+            <form id="registerForm" class="form-signin">
+                <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" id="first_name" name="first_name" class="form-control" placeholder="First Name"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" class="form-control" placeholder="Last Name"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <input type="email" id="email" name="email" class="form-control" placeholder="Email address"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Password"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="phone_number">Phone Number</label>
+                    <input type="text" id="phone_number" name="phone_number" class="form-control"
+                           placeholder="Phone Number" required>
+                </div>
+                <div class="form-group">
+                    <label for="date_of_birth">Date of Birth</label>
+                    <input type="date" id="date_of_birth" name="date_of_birth" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select id="gender" name="gender" class="form-control">
+                        {% for value, display in gender_choices %}
+                            <option value="{{ value }}">{{ display }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="mailing_address">Mailing Address</label>
+                    <textarea id="mailing_address" name="mailing_address" class="form-control"
+                              placeholder="Mailing Address" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="mailing_address_two">Mailing Address Line 2</label>
+                    <textarea id="mailing_address_two" name="mailing_address_two" class="form-control"
+                              placeholder="Mailing Address Line 2"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="city">City</label>
+                    <input type="text" id="city" name="city" class="form-control" placeholder="City" required>
+                </div>
+                <div class="form-group">
+                    <label for="state">State</label>
+                    <input type="text" id="state" name="state" class="form-control" placeholder="State" required>
+                </div>
+                <div class="form-group">
+                    <label for="zip_code">Zip Code</label>
+                    <input type="text" id="zip_code" name="zip_code" class="form-control" placeholder="Zip Code"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="user_type">User Type</label>
+                    <select id="user_type" name="user_type" class="form-control">
+                        {% for value, display in user_type_choices %}
+                            <option value="{{ value }}">{{ display }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const first_name = document.getElementById('first_name').value;
+            const last_name = document.getElementById('last_name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const phone_number = document.getElementById('phone_number').value;
+            const date_of_birth = document.getElementById('date_of_birth').value;
+            const gender = document.getElementById('gender').value;
+            const mailing_address = document.getElementById('mailing_address').value;
+            const mailing_address_two = document.getElementById('mailing_address_two').value;
+            const city = document.getElementById('city').value;
+            const state = document.getElementById('state').value;
+            const zip_code = document.getElementById('zip_code').value;
+            const user_type = document.getElementById('user_type').value;
+
+            fetch('/api/register/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({
+                    first_name: first_name,
+                    last_name: last_name,
+                    email: email,
+                    password: password,
+                    phone_number: phone_number,
+                    date_of_birth: date_of_birth,
+                    gender: gender,
+                    mailing_address: mailing_address,
+                    mailing_address_two: mailing_address_two,
+                    city: city,
+                    state: state,
+                    zip_code: zip_code,
+                    user_type: user_type
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = '/web';
+                    } else {
+                        alert(data.error);
+                    }
+                });
+        });
+    </script>
+{% endblock %}
