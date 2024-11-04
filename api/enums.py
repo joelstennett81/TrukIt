@@ -4,7 +4,6 @@ from enum import Enum
 class UserType(Enum):
     CUSTOMER = 'CUSTOMER'
     DRIVER = ('DRIVER')
-    ADMIN = 'ADMIN'
 
 
 class DriveType(Enum):
@@ -73,3 +72,11 @@ class InsuranceCoverageType(Enum):
     ROADSIDE = 'ROADSIDE'
     LIABILITY = 'LIABILITY'
     UNINSURED = 'UNINSURED'
+
+
+class DeliveryStatusType(Enum):
+    REQUESTED = 'REQUESTED'
+    SCHEDULED = 'SCHEDULED'
+    IN_PROGRESS = 'IN PROGRESS'
+    COMPLETED = 'COMPLETED'
+    REJECTED = 'REJECTED'

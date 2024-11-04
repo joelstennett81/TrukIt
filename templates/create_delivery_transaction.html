@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Delivery{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>Create Delivery</h2>
+        <a href="{% url 'web_delivery_transactions' %}" class="btn btn-secondary mb-3">Back to My Deliveries</a>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ full_form.as_p }}
+            {{ inline_form.as_p }}
+
+            <button type="submit" class="btn btn-primary">Create Delivery</button>
+        </form>
+
+        <div id="result"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#create-delivery-form').on('submit', function (e) {
+                e.preventDefault();
+
+                var formData = $(this).serialize();
+                $.ajax({
+                    url: '{% url 'web_create_delivery_transaction' %}',
+                    type: 'POST',
+                    data: formData,
+                    success: function (response) {
+                        $('#result').html('<p>Success! Delivery created with ID: ' + response.transaction_id + '</p>');
+                        $('#create-delivery-form')[0].reset(); // Reset the form
+                    },
+                    error: function (xhr, status, error) {
+                        $('#result').html('<p>Error: ' + xhr.responseJSON.message + '</p>');
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

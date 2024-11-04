@@ -6,7 +6,7 @@
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6 text-center">
-                <h1>Are you sure you want to logout?</h1>
+                <h1>Are you sure you want to log out?</h1>
                 <button id="confirmLogout" class="btn btn-danger">Yes</button>
                 <button id="cancelLogout" class="btn btn-secondary">No</button>
             </div>
@@ -24,7 +24,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        window.location.href = '/web';
+                        window.location.href = '/';
                     } else {
                         alert('Logout failed');
                     }
@@ -32,7 +32,7 @@
         });
 
         document.getElementById('cancelLogout').addEventListener('click', function () {
-            window.location.href = '/web';
+            window.location.href = '/';
         });
     </script>
 {% endblock %}

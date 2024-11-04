@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}My Deliveries{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>My Deliveries</h2>
+        <a href="{% url 'web_create_delivery_transaction' %}" class="btn btn-primary mb-3">Create New Delivery</a>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Pickup Location</th>
+                <th>Delivery Location</th>
+                <th>Item Name</th>
+                <th>Timestamp</th>
+                <th>Status</th>
+                <th>Customer</th>
+                <th>Driver</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for transaction in delivery_transactions %}
+                <tr>
+                    <td>{{ transaction.id }}</td>
+                    <td>{{ transaction.pickup_location_address }}</td>
+                    <td>{{ transaction.delivery_location_address }}</td>
+                    <td>{{ transaction.delivery_item.name }}</td>
+                    <td>{{ transaction.request_pickup_timestamp|date:"Y-m-d H:i:s" }}</td>
+                    <td>{{ transaction.status }}</td>
+                    <td>{{ transaction.customer.truk_it_user.first_name }} {{ transaction.customer.truk_it_user.last_name }}</td>
+                    <td>{% if transaction.truk_it_user.driver %}{{ transaction.driver.truk_it_user.username }}{% else %}-{% endif %}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

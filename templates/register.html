@@ -8,6 +8,14 @@
             <h1 class="h3 mb-3 font-weight-normal">Register</h1>
             <form id="registerForm" class="form-signin">
                 <div class="form-group">
+                    <label for="user_type">User Type</label>
+                    <select id="user_type" name="user_type" class="form-control">
+                        {% for value, display in user_type_choices %}
+                            <option value="{{ value }}">{{ display }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
                     <label for="first_name">First Name</label>
                     <input type="text" id="first_name" name="first_name" class="form-control" placeholder="First Name"
                            required>
@@ -50,11 +58,6 @@
                               placeholder="Mailing Address" required></textarea>
                 </div>
                 <div class="form-group">
-                    <label for="mailing_address_two">Mailing Address Line 2</label>
-                    <textarea id="mailing_address_two" name="mailing_address_two" class="form-control"
-                              placeholder="Mailing Address Line 2"></textarea>
-                </div>
-                <div class="form-group">
                     <label for="city">City</label>
                     <input type="text" id="city" name="city" class="form-control" placeholder="City" required>
                 </div>
@@ -66,14 +69,6 @@
                     <label for="zip_code">Zip Code</label>
                     <input type="text" id="zip_code" name="zip_code" class="form-control" placeholder="Zip Code"
                            required>
-                </div>
-                <div class="form-group">
-                    <label for="user_type">User Type</label>
-                    <select id="user_type" name="user_type" class="form-control">
-                        {% for value, display in user_type_choices %}
-                            <option value="{{ value }}">{{ display }}</option>
-                        {% endfor %}
-                    </select>
                 </div>
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
             </form>
@@ -90,7 +85,6 @@
             const date_of_birth = document.getElementById('date_of_birth').value;
             const gender = document.getElementById('gender').value;
             const mailing_address = document.getElementById('mailing_address').value;
-            const mailing_address_two = document.getElementById('mailing_address_two').value;
             const city = document.getElementById('city').value;
             const state = document.getElementById('state').value;
             const zip_code = document.getElementById('zip_code').value;
@@ -111,7 +105,6 @@
                     date_of_birth: date_of_birth,
                     gender: gender,
                     mailing_address: mailing_address,
-                    mailing_address_two: mailing_address_two,
                     city: city,
                     state: state,
                     zip_code: zip_code,
@@ -121,7 +114,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
-                        window.location.href = '/web';
+                        window.location.href = '/';
                     } else {
                         alert(data.error);
                     }
