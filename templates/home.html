@@ -6,16 +6,6 @@
     <div class="container text-center my-3">
         <h1>Welcome to Truk-It</h1>
         <p>Your trusted partner for delivering large items right to your doorstep.</p>
-        {% if user.is_authenticated %}
-            {% if user.user_type == 'DRIVER' %}
-                <a href="{% url 'web_driver_dashboard' %}" class="btn btn-primary btn-lg">Your Account</a>
-            {% elif user.user_type == 'CUSTOMER' %}
-                <a href="{% url 'web_customer_dashboard' %}" class="btn btn-primary btn-lg">Your Account</a>
-            {% endif %}
-        {% else %}
-            <a href="{% url 'web_register' %}" class="btn btn-primary btn-lg">Get Started</a>
-        {% endif %}
-
     </div>
 
     <div class="container features py-3">
@@ -54,7 +44,17 @@
             <div class="col-md-4 mb-3">
                 <div class="p-2 border rounded">
                     <h4>2. Request a Delivery</h4>
-                    <a href="{% url 'web_delivery_transactions' %}" class="btn btn-primary btn-lg">Request a Delivery</a>
+                    {% if user.is_authenticated %}
+                        {% if user.user_type == 'DRIVER' %}
+                            <a href="{% url 'web_driver_dashboard' %}" class="btn btn-primary btn-lg">Your Account</a>
+                        {% elif user.user_type == 'CUSTOMER' %}
+                            <a href="{% url 'web_customer_dashboard' %}" class="btn btn-primary btn-lg">Your Account</a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url 'web_register' %}" class="btn btn-secondary btn-lg">Register</a>
+                        <a href="{% url 'web_login' %}" class="btn btn-secondary btn-lg">Login</a>
+                    {% endif %}
+
                 </div>
             </div>
             <div class="col-md-4 mb-3">

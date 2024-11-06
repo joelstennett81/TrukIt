@@ -1,5 +1,10 @@
-/* styles.css */
-{%load static %}
+{
+%
+load
+static
+%
+}
+
 .navbar {
     background-color: #000000;
     margin-bottom: 10px;
@@ -43,6 +48,28 @@
 .btn-primary:hover {
     background-color: #ff8b03;
     border-color: #ff8b03;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #495057;
+    border-color: #495057;
+}
+
+.btn-outline-primary {
+    color: #f2391a;
+    background-color: transparent;
+    border-color: #f2391a;
+}
+
+.btn-outline-secondary {
+    color: #6c757d;
+    background-color: transparent;
+    border-color: #6c757d;
 }
 
 .features h2 {

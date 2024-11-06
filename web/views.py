@@ -37,16 +37,37 @@ def customer_dashboard(request):
 
 
 def driver_dashboard(request):
-    print(request.user.truk_it_user)
     return render(request, 'driver_dashboard.html')
 
 
-def delivery_transactions(request):
-    delivery_transactions = DeliveryTransaction.objects.filter(customer=request.user.customer)
+def customer_delivery_transactions(request):
+    try:
+        customer = request.user.customer
+        delivery_transactions = DeliveryTransaction.objects.filter(customer=customer)
+    except AttributeError:
+        # Handle the case where the user doesn't have a customer
+        delivery_transactions = DeliveryTransaction.objects.none()
+
     context = {
         'delivery_transactions': delivery_transactions,
+        'no_customer_message': 'No customer associated with this account.' if delivery_transactions.count() == 0 else None
     }
-    return render(request, 'delivery_transactions.html', context)
+    return render(request, 'customer_delivery_transactions.html', context)
+
+
+def driver_delivery_transactions(request):
+    try:
+        driver = request.user.driver
+        delivery_transactions = DeliveryTransaction.objects.filter(driver=driver)
+    except AttributeError:
+        # Handle the case where the user doesn't have a driver
+        delivery_transactions = DeliveryTransaction.objects.none()
+
+    context = {
+        'delivery_transactions': delivery_transactions,
+        'no_driver_message': 'No driver associated with this account.' if delivery_transactions.count() == 0 else None
+    }
+    return render(request, 'driver_delivery_transactions.html', context)
 
 
 def create_delivery_transaction(request):
@@ -73,7 +94,7 @@ def create_delivery_transaction(request):
             )
             transaction.save()
 
-            return render(redirect('web_delivery_transactions'))
+            return redirect('web_customer_delivery_transactions')
     else:
         inline_form = DeliveryTransactionFormInline(initial={
             'name': '',

@@ -43,6 +43,28 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h2>Create New Delivery</h2>
+                    </div>
+                    <div class="card-body">
+                        <a href="{% url 'web_create_delivery_transaction' %}" class="btn btn-primary">Create New
+                            Delivery</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h2>Transaction History</h2>
+                    </div>
+                    <div class="card-body">
+                        <a href="{% url 'web_customer_delivery_transactions' %}" class="btn btn-secondary">View Delivery
+                            History</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}

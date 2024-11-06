@@ -19,10 +19,6 @@ class TrukItUser(AbstractUser):
     registration_date = models.DateField(auto_now_add=True)
     user_type = models.CharField(max_length=50, choices=[(tag.name, tag.value) for tag in UserType])
 
-    def clean(self):
-        super().clean()
-        self._clean_fields()
-
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
