@@ -2,9 +2,8 @@
 
 {% block content %}
     <div class="container">
-        <h2>Create Delivery</h2>
+        <h2>Request Delivery</h2>
 
-        <!-- Transaction Form -->
         <form id="transactionForm">
             {% csrf_token %}
             {{ delivery_transaction_form.as_p }}
@@ -12,6 +11,12 @@
         </form>
 
         <div id="result"></div>
+
+        <!-- Add this section at the bottom -->
+        <div class="note">
+            <p>Note: This is a request for delivery service. Our team will review your submission and contact you to
+                schedule a delivery time once a driver becomes available.</p>
+        </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -47,6 +52,16 @@
             border: 1px solid #ddd;
             padding: 10px;
             margin-bottom: 10px;
+        }
+
+        .note {
+            background-color: #f8f9fa;
+            border-left: 4px solid #0c5460;
+            color: #333;
+            padding: 15px;
+            text-align: center;
+            font-style: italic;
+            margin-top: 20px;
         }
     </style>
 {% endblock %}

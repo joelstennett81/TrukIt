@@ -43,12 +43,12 @@
             </div>
             <div class="col-md-4 mb-3">
                 <div class="p-2 border rounded">
-                    <h4>2. Request a Delivery</h4>
+                    <h4>2. Request and View Deliveries </h4>
                     {% if user.is_authenticated %}
                         {% if user.user_type == 'DRIVER' %}
-                            <a href="{% url 'web_driver_dashboard' %}" class="btn btn-primary btn-lg">Your Account</a>
+                            <a href="{% url 'web_driver_dashboard' %}" class="btn btn-primary btn-lg">Dashboard</a>
                         {% elif user.user_type == 'CUSTOMER' %}
-                            <a href="{% url 'web_customer_dashboard' %}" class="btn btn-primary btn-lg">Your Account</a>
+                            <a href="{% url 'web_customer_dashboard' %}" class="btn btn-primary btn-lg">Dashboard</a>
                         {% endif %}
                     {% else %}
                         <a href="{% url 'web_register' %}" class="btn btn-secondary btn-lg">Register</a>

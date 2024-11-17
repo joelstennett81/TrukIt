@@ -44,6 +44,10 @@ class DeliveryItemForm(forms.ModelForm):
         model = DeliveryItem
         fields = ['name', 'length', 'width', 'height', 'weight', 'description']
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.initial['transaction_id'] = kwargs.get('initial', {}).get('transaction_id')
+
 
 class DeliveryEquipmentForm(forms.Form):
     equipment = forms.ModelMultipleChoiceField(

@@ -9,5 +9,5 @@ urlpatterns = [
     path('customer_dashboard/', CustomerDashboardView.as_view(), name='api_customer_dashboard'),
     path('delivery_transaction/', CreateDeliveryTransactionView.as_view(), name='api_create_delivery_transaction'),
     path('add_delivery_item/', AddDeliveryItemView.as_view(), name='api_add_delivery_item'),
-    path('get_delivery_items/', GetDeliveryItemsView.as_view(), name='api_get_delivery_items'),
+    path('get_delivery_cart_items/', GetDeliveryCartItemsView.as_view(), name='api_get_delivery_cart_items'),
 ]

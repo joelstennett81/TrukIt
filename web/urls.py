@@ -11,7 +11,8 @@ urlpatterns = [
     path('customer_delivery_transactions/', customer_delivery_transactions, name='web_customer_delivery_transactions'),
     path('driver_delivery_transactions/', driver_delivery_transactions, name='web_driver_delivery_transactions'),
     path('create_delivery_transaction/', create_delivery_transaction, name='web_create_delivery_transaction'),
-    path('choose_action/', choose_action, name='web_choose_action'),
-    path('delivery_transaction_request_successful/', delivery_transaction_request_successful, name='web_delivery_transaction_request_successful')
+    path('add_delivery_item/', add_delivery_item, name='web_add_delivery_item'),
+    path('submit_delivery_transaction_request/', submit_delivery_transaction_request,
+         name='web_submit_delivery_transaction_request')
 
 ]

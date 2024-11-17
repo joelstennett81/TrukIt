@@ -175,7 +175,9 @@ class CustomerDashboardView(APIView):
 class CreateDeliveryTransactionView(APIView):
     def post(self, request):
         print('in view')
-        serializer = DeliveryTransactionSerializer(data=request.data)
+        serializer = DeliveryTransactionSerializer(data=request.data, context={'request': request})
+        print('serializer: ', serializer)
+
         if serializer.is_valid():
             print('is valid')
             serializer.save()
@@ -183,23 +185,41 @@ class CreateDeliveryTransactionView(APIView):
                 'message': 'Delivery transaction created successfully',
                 'transaction_id': serializer.data['id']
             }, status=status.HTTP_201_CREATED)
+        else:
+            print('errors: ', serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AddDeliveryItemView(APIView):
     def post(self, request):
         serializer = DeliveryItemSerializer(data=request.data)
+
         if serializer.is_valid():
-            serializer.save()
+            instance = serializer.save()
+
+            # Save the transaction_id along with the item
+            delivery_transaction = DeliveryTransaction.objects.get(id=request.data['transaction_id'])
+            instance.delivery_transaction.set([delivery_transaction])
+
             return Response({
                 'message': 'Delivery item added successfully',
-                'item_id': serializer.data['id']
+                'item_id': instance.id,
+                'transaction_id': request.data['transaction_id']
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class GetDeliveryItemsView(APIView):
+class GetDeliveryCartItemsView(APIView):
     def get(self, request):
-        items = DeliveryItem.objects.all()
+        transaction_id = request.query_params.get('transaction_id')
+        print('params: ', request.query_params)
+        print('trans id: ', transaction_id)
+        if not transaction_id:
+            return Response({"error": "Transaction ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        items = DeliveryItem.objects.filter(delivery_transaction__id=transaction_id)
+        print('items: ', items)
         serializer = DeliveryItemSerializer(items, many=True)
+        print('data: ', serializer.data)
         return Response(serializer.data)
+

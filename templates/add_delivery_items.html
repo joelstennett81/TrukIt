@@ -4,6 +4,9 @@
     <div class="container">
         <h2>Add Delivery Items</h2>
 
+        <!-- Button to open the modal -->
+        <button type="button" class="btn btn-primary mb-3" onclick="$('#addItemModal').modal('show')">Add Item</button>
+
         <!-- Modal structure for adding items -->
         <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -24,37 +27,83 @@
             </div>
         </div>
 
-        <div id="result"></div>
+        <!-- Cart display area -->
+        <div id="cartDisplay" class="mt-4">
+            <h3>Cart</h3>
+            <ul id="cartItemsList" class="list-group">
+                <!-- Cart items will be dynamically added here -->
+            </ul>
+            <p>Total items: <span id="totalItems">0</span></p>
+        </div>
+
+        <!-- Finish button moved below the cart items list -->
+        <a href="{% url 'web_submit_delivery_transaction_request' %}" class="btn btn-success mt-3">Finish Delivery</a>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#addItemForm').on('submit', function (e) {
-                e.preventDefault();
-                var $form = $(this);
-                var formData = $form.serialize();
-
+            // Function to add item to cart
+            function addItemToCart(itemData) {
                 $.ajax({
                     url: '{% url 'api_add_delivery_item' %}',
                     type: 'POST',
-                    data: formData,
+                    data: JSON.stringify(itemData),
                     headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                    contentType: "application/json",
                     success: function (response) {
-                        console.log('Success:', response);
-                        $('#addItemModal').modal('hide');
-                        $('#result').html('<p>Item added successfully.</p>');
-                        // Add a button to add another item
-                        $('<button class="btn btn-secondary mt-2" onclick="addAnotherItem()">Add Another Item</button>').appendTo('#addItemModal .modal-footer');
+                        console.log('Item added successfully:', response);
+                        updateCartDisplay();
                     },
                     error: function (xhr, status, error) {
-                        console.log('Error:', error);
-                        $('#result').html('<p>Error: ' + xhr.responseJSON.message + '</p>');
+                        console.error('Error adding item:', xhr.responseJSON.message);
                     }
                 });
+            }
+
+            // Function to update cart display
+            function updateCartDisplay() {
+                $.ajax({
+                    url: '{% url 'api_get_delivery_cart_items' %}?transaction_id={{ transaction_id }}',
+                    type: 'GET',
+                    headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                    success: function (data) {
+                        var cartItemsList = $('#cartItemsList');
+                        cartItemsList.empty();
+                        console.log('data: ', data)
+                        data.forEach(function (item) {
+                            var $item = $('<li>')
+                                .addClass('list-group-item')
+                                .append($('<span>').text(item.name));
+
+                            cartItemsList.append($item);
+                        });
+
+                        $('#totalItems').text(data.length);
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error fetching cart items:', error);
+                    }
+                });
+            }
+
+            // Initialize cart display
+            updateCartDisplay();
+
+            // Handle form submission
+            $('#addItemForm').on('submit', function (e) {
+                e.preventDefault();
+                var formData = $(this).serializeArray().reduce(function (obj, x) {
+                    obj[x.name] = x.value;
+                    return obj;
+                }, {});
+                addItemToCart(formData);
+                $(this)[0].reset(); // Clear form fields
+                $('#addItemModal').modal('hide');
             });
 
+            // Add button to add another item
             function addAnotherItem() {
                 $('#addItemModal').modal('show');
                 $('.modal-footer').empty();
@@ -62,12 +111,4 @@
             }
         });
     </script>
-
-    <style>
-        #result div {
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-    </style>
 {% endblock %}

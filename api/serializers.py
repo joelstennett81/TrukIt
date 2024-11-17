@@ -61,8 +61,7 @@ class DeliveryEquipmentSerializer(serializers.ModelSerializer):
 
 class DeliveryTransactionSerializer(serializers.ModelSerializer):
     items = DeliveryItemSerializer(many=True, read_only=True)
-    # equipment = DeliveryEquipmentSerializer(many=True, read_only=True)
-    driver = TrukItUserSerializer(read_only=True)
+    customer = CustomerSerializer(read_only=True)
 
     class Meta:
         model = DeliveryTransaction
@@ -71,10 +70,16 @@ class DeliveryTransactionSerializer(serializers.ModelSerializer):
                   'driver', 'items']
 
     def create(self, validated_data):
+        print('validated data: ', validated_data)
         items_data = validated_data.pop('items', [])
         driver_data = validated_data.pop('driver', None)
+        user_id = self.context['request'].user.id
+        customer = Customer.objects.get(truk_it_user_id=user_id)
+        validated_data['customer'] = customer
 
-        transaction = DeliveryTransaction.objects.create(**validated_data)
+        transaction = DeliveryTransaction.objects.create(
+            **validated_data
+        )
 
         if items_data:
             DeliveryTransactionItem.objects.bulk_create([

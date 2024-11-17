@@ -123,7 +123,7 @@ class DeliveryTransaction(models.Model):
         'DeliveryItem',
         verbose_name='Items to be Delivered',
         blank=True,
-        related_name='delivery_transactions'
+        related_name='delivery_transaction'
     )
 
     equipment_needed = models.ManyToManyField(
