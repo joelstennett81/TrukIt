@@ -1,9 +1,5 @@
 from django import forms
-from django.shortcuts import render
-from django.utils import timezone
-from django.utils.timezone import now
-from django.core.validators import MinValueValidator, MaxValueValidator
-from app import settings
+from django.contrib.admin.widgets import FilteredSelectMultiple
 from .models import *
 
 
@@ -41,23 +37,18 @@ class DeliveryTransactionForm(forms.ModelForm):
                   'request_delivery_timestamp']
 
 
-class DeliveryTransactionFormInline(forms.ModelForm):
-    name = forms.CharField(max_length=255, required=False)
-    length = forms.FloatField(required=False, validators=[MinValueValidator(0)])
-    width = forms.FloatField(required=False, validators=[MinValueValidator(0)])
-    height = forms.FloatField(required=False, validators=[MinValueValidator(0)])
-    weight = forms.FloatField(required=False, validators=[MinValueValidator(0)])
-    description = forms.CharField(max_length=500, required=False)
+class DeliveryItemForm(forms.ModelForm):
+    quantity = forms.IntegerField(widget=forms.NumberInput(attrs={'placeholder': 1}))
 
     class Meta:
         model = DeliveryItem
         fields = ['name', 'length', 'width', 'height', 'weight', 'description']
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs.update({'placeholder': 'Enter delivery item name'})
-        self.fields['length'].widget.attrs.update({'placeholder': 'Length (in meters)'})
-        self.fields['width'].widget.attrs.update({'placeholder': 'Width (in meters)'})
-        self.fields['height'].widget.attrs.update({'placeholder': 'Height (in meters)'})
-        self.fields['weight'].widget.attrs.update({'placeholder': 'Weight (in kg)'})
-        self.fields['description'].widget.attrs.update({'placeholder': 'Description'})
+
+class DeliveryEquipmentForm(forms.Form):
+    equipment = forms.ModelMultipleChoiceField(
+        queryset=DeliveryEquipment.objects.all(),
+        widget=FilteredSelectMultiple("Equipment", is_stacked=False),
+        required=False
+    )
+    quantity = forms.IntegerField(min_value=0, required=False)

@@ -101,11 +101,17 @@ class DeliveryItem(models.Model):
     description = models.CharField(max_length=500, blank=True, null=True)
 
 
+class DeliveryEquipment(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    description = models.CharField(max_length=500)
+
+
 class DeliveryTransaction(models.Model):
-    status = models.CharField(max_length=30, choices=[(tag.name, tag.value) for tag in DeliveryStatusType], default='REQUESTED')
+    status = models.CharField(max_length=30, choices=[(tag.name, tag.value) for tag in DeliveryStatusType],
+                              default='REQUESTED')
     pickup_location_address = models.CharField(max_length=255)
     delivery_location_address = models.CharField(max_length=255)
-    delivery_item = models.ForeignKey(DeliveryItem, on_delete=models.PROTECT, related_name='customer_delivery_transaction')
     customer_submit_timestamp = models.DateTimeField(auto_now_add=True)
     request_delivery_timestamp = models.DateTimeField()
     actual_delivery_timestamp = models.DateTimeField(null=True, blank=True)
@@ -113,6 +119,19 @@ class DeliveryTransaction(models.Model):
     actual_pickup_timestamp = models.DateTimeField(null=True, blank=True)
     customer = models.ForeignKey(Customer, on_delete=models.PROTECT)
     driver = models.ForeignKey(Driver, on_delete=models.PROTECT, null=True, blank=True)
+    items_to_be_delivered = models.ManyToManyField(
+        'DeliveryItem',
+        verbose_name='Items to be Delivered',
+        blank=True,
+        related_name='delivery_transactions'
+    )
+
+    equipment_needed = models.ManyToManyField(
+        'DeliveryEquipment',
+        verbose_name='Equipment Needed',
+        blank=True,
+        related_name='delivery_transactions'
+    )
 
     def clean(self):
         super().clean()
@@ -125,3 +144,22 @@ class DeliveryTransaction(models.Model):
     @property
     def miles_driven(self):
         return 10
+
+
+class DeliveryTransactionItem(models.Model):
+    transaction = models.ForeignKey('DeliveryTransaction', on_delete=models.CASCADE, related_name='transaction_items')
+    item = models.ForeignKey('DeliveryItem', on_delete=models.CASCADE, related_name='transaction_items')
+    quantity = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        unique_together = ('transaction', 'item')
+
+
+class DeliveryTransactionEquipment(models.Model):
+    transaction = models.ForeignKey('DeliveryTransaction', on_delete=models.CASCADE,
+                                    related_name='transaction_equipment')
+    equipment = models.ForeignKey('DeliveryEquipment', on_delete=models.CASCADE, related_name='transaction_equipment')
+    quantity = models.PositiveIntegerField(default=1)
+
+    class Meta:
+        unique_together = ('transaction', 'equipment')

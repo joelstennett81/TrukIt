@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.utils import timezone
 
@@ -70,52 +71,77 @@ def driver_delivery_transactions(request):
     return render(request, 'driver_delivery_transactions.html', context)
 
 
+@login_required
 def create_delivery_transaction(request):
     if request.method == 'POST':
-        inline_form = DeliveryTransactionFormInline(request.POST)
-        full_form = DeliveryTransactionForm(request.POST)
-
-        if inline_form.is_valid() and full_form.is_valid():
-            cleaned_data_inline = inline_form.cleaned_data
-            cleaned_data_full = full_form.cleaned_data
-
-            # Create a new DeliveryItem object with the cleaned data
-            new_item = DeliveryItem(**cleaned_data_inline)
-            new_item.save()
-
-            # Create a new DeliveryTransaction with the associated DeliveryItem
-            transaction = DeliveryTransaction(
-                pickup_location_address=cleaned_data_full['pickup_location_address'],
-                delivery_location_address=cleaned_data_full['delivery_location_address'],
-                request_pickup_timestamp=cleaned_data_full['request_pickup_timestamp'],
-                request_delivery_timestamp=cleaned_data_full['request_delivery_timestamp'],
-                delivery_item=new_item,
-                customer=request.user.customer
-            )
-            transaction.save()
-
-            return redirect('web_customer_delivery_transactions')
+        form = DeliveryTransactionForm(request.POST)
+        if form.is_valid():
+            delivery = form.save(commit=False)
+            delivery.user = request.user
+            delivery.save()
+            return redirect(f'add_delivery_item/?transaction_id={delivery.id}')
     else:
-        inline_form = DeliveryTransactionFormInline(initial={
-            'name': '',
-            'length': 0,
-            'width': 0,
-            'height': 0,
-            'weight': 0,
-            'description': '',
-            'pickup_location_address': '',
-            'delivery_location_address': '',
-            'request_pickup_timestamp': now(),
-            'request_delivery_timestamp': now()
-        })
-        full_form = DeliveryTransactionForm(initial={
-            'pickup_location_address': '',
-            'delivery_location_address': '',
-            'request_pickup_timestamp': now(),
-            'request_delivery_timestamp': now()
-        })
+        form = DeliveryTransactionForm()
 
-    return render(request, 'create_delivery_transaction.html', {
-        'inline_form': inline_form,
-        'full_form': full_form
+    return render(request, 'create_delivery_transaction.html', {'delivery_transaction_form': form})
+
+
+@login_required
+def add_delivery_item(request):
+    transaction_id = request.GET.get('transaction_id')
+    if not transaction_id:
+        return redirect('create_delivery')
+
+    if request.method == 'POST':
+        form = DeliveryItemForm(request.POST)
+        if form.is_valid():
+            item = form.save(commit=False)
+            item.delivery_transaction = DeliveryTransaction.objects.get(id=transaction_id)
+            item.save()
+
+            # Redirect to a new view that shows the choices
+            return redirect('choose_action', transaction_id=transaction_id)
+    else:
+        form = DeliveryItemForm()
+
+    return render(request, 'add_delivery_items.html', {'form': form})
+
+
+@login_required
+def choose_action(request, transaction_id):
+    if request.method == 'POST':
+        action = request.POST.get('action')
+
+        if action == 'add_another':
+            return redirect(f'add_delivery_item/?transaction_id={transaction_id}')
+        elif action == 'submit_and_save':
+            # Process the delivery transaction here
+            # You might want to call an API endpoint or perform database operations
+            # For example:
+            # process_delivery(transaction_id)
+            return redirect('web_customer_delivery_transactions')  # Or wherever you want to redirect after submission
+
+    # Render the template with the choice options
+    return render(request, 'choose_action.html', {
+        'transaction_id': transaction_id,
+        'can_add_another': True,  # Set this to False if you don't want to allow adding another item
     })
+
+
+def delivery_transaction_request_successful(request):
+    transaction_id = request.GET.get('transaction_id')
+
+    if not transaction_id:
+        return redirect('web_customer_dashboard')  # Redirect to home page if no transaction ID
+
+    try:
+        transaction = DeliveryTransaction.objects.get(id=transaction_id)
+
+        context = {
+            'transaction': transaction,
+            'message': 'Delivery requested successfully!',
+        }
+
+        return render(request, 'delivery_request_success.html', context)
+    except DeliveryTransaction.DoesNotExist:
+        return redirect('web_customer_dashboard')

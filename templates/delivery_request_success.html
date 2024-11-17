@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Delivery Requested Successfully!</h3>
+                </div>
+                <div class="card-body">
+                    <p>Here's a summary of the delivery transaction:</p>
+                    <dl class="row">
+                        <dt class="col-sm-4">ID:</dt>
+                        <dd class="col-sm-8">{{ transaction.id }}</dd>
+
+                        <dt class="col-sm-4">Customer:</dt>
+                        <dd class="col-sm-8">{{ transaction.customer.name }}</dd>
+
+                        <dt class="col-sm-4">Driver:</dt>
+                        <dd class="col-sm-8">{{ transaction.driver.name }}</dd>
+
+                        <dt class="col-sm-4">Pickup Address:</dt>
+                        <dd class="col-sm-8">{{ transaction.pickup_address }}</dd>
+
+                        <dt class="col-sm-4">Dropoff Address:</dt>
+                        <dd class="col-sm-8">{{ transaction.dropoff_address }}</dd>
+
+                        <dt class="col-sm-4">Estimated Time:</dt>
+                        <dd class="col-sm-8">{{ transaction.estimated_time }}</dd>
+                    </dl>
+
+                    <p>{{ message }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

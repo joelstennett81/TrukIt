@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h2>Add Delivery Items</h2>
+
+        <!-- Modal structure for adding items -->
+        <div class="modal fade" id="addItemModal" tabindex="-1" aria-labelledby="addItemModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addItemModalLabel">Add Items</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="addItemForm">
+                            {% csrf_token %}
+                            {{ delivery_item_form.as_p }}
+                            <input type="hidden" name="transaction_id" value="{{ transaction_id }}">
+                            <button type="submit" class="btn btn-primary">Add Item</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#addItemForm').on('submit', function (e) {
+                e.preventDefault();
+                var $form = $(this);
+                var formData = $form.serialize();
+
+                $.ajax({
+                    url: '{% url 'api_add_delivery_item' %}',
+                    type: 'POST',
+                    data: formData,
+                    headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                    success: function (response) {
+                        console.log('Success:', response);
+                        $('#addItemModal').modal('hide');
+                        $('#result').html('<p>Item added successfully.</p>');
+                        // Add a button to add another item
+                        $('<button class="btn btn-secondary mt-2" onclick="addAnotherItem()">Add Another Item</button>').appendTo('#addItemModal .modal-footer');
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('Error:', error);
+                        $('#result').html('<p>Error: ' + xhr.responseJSON.message + '</p>');
+                    }
+                });
+            });
+
+            function addAnotherItem() {
+                $('#addItemModal').modal('show');
+                $('.modal-footer').empty();
+                $('<button class="btn btn-secondary mt-2" onclick="addAnotherItem()">Add Another Item</button>').appendTo('#addItemModal .modal-footer');
+            }
+        });
+    </script>
+
+    <style>
+        #result div {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+{% endblock %}

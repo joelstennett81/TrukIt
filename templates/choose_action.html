@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Choose Action</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        <input type="hidden" name="transaction_id" value="{{ transaction_id }}">
+
+        <label for="add-another">
+            <input type="radio" id="add-another" name="action" value="add_another" checked>
+            Add Another Item
+        </label><br>
+
+        <label for="submit-and-save">
+            <input type="radio" id="submit-and-save" name="action" value="submit_and_save">
+            Submit and Save All Items
+        </label><br>
+
+        <button type="submit">Submit Choice</button>
+    </form>
+{% endblock %}

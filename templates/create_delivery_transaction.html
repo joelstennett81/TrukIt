@@ -1,42 +1,52 @@
 {% extends 'base.html' %}
 
-{% block title %}Create Delivery{% endblock %}
-
 {% block content %}
     <div class="container">
         <h2>Create Delivery</h2>
-        <form method="POST">
-            {% csrf_token %}
-            {{ full_form.as_p }}
-            {{ inline_form.as_p }}
 
-            <button type="submit" class="btn btn-primary">Create Delivery</button>
-            <a href="{% url 'web_customer_delivery_transactions' %}" class="btn btn-secondary">Cancel</a>
+        <!-- Transaction Form -->
+        <form id="transactionForm">
+            {% csrf_token %}
+            {{ delivery_transaction_form.as_p }}
+            <button type="submit" class="btn btn-primary">Save Delivery Information</button>
         </form>
 
         <div id="result"></div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         $(document).ready(function () {
-            $('#create-delivery-form').on('submit', function (e) {
+            $('#transactionForm').on('submit', function (e) {
                 e.preventDefault();
+                var $form = $(this);
+                var formData = $form.serialize();
 
-                var formData = $(this).serialize();
                 $.ajax({
-                    url: '{% url 'web_create_delivery_transaction' %}',
+                    url: '{% url 'api_create_delivery_transaction' %}',
                     type: 'POST',
                     data: formData,
+                    headers: {'X-CSRFToken': '{{ csrf_token }}'},
                     success: function (response) {
-                        $('#result').html('<p>Success! Delivery created with ID: ' + response.transaction_id + '</p>');
-                        $('#create-delivery-form')[0].reset(); // Reset the form
+                        console.log('Success:', response);
+                        // Redirect to the items page with the transaction ID
+                        window.location.href = '/add_delivery_item/?transaction_id=' + response.transaction_id;
                     },
                     error: function (xhr, status, error) {
+                        console.log('Error:', error);
                         $('#result').html('<p>Error: ' + xhr.responseJSON.message + '</p>');
                     }
                 });
             });
         });
     </script>
+
+    <style>
+        #result div {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
 {% endblock %}

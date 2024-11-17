@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
+from django.http import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.views import APIView
@@ -135,33 +136,70 @@ class CustomerDashboardView(APIView):
             return Response({'error': 'Customer not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
-class DeliveryTransactionView(APIView):
+# class DeliveryTransactionView(APIView):
+#     def post(self, request):
+#         try:
+#             delivery_transaction_data = request.data.get('transaction')
+#             items_data = request.data.getlist('items[]') or []
+#             # equipment_data = request.data.getlist('equipment[]') or []
+#
+#             if not delivery_transaction_data:
+#                 return Response({'error': 'Transaction data is required'}, status=status.HTTP_400_BAD_REQUEST)
+#
+#             transaction_serializer = DeliveryTransactionSerializer(data=delivery_transaction_data)
+#             if transaction_serializer.is_valid():
+#                 transaction = transaction_serializer.save()
+#                 created_items_objects = request.session.get('created_items_objects', [])
+#                 for item_object in created_items_objects:
+#                     item = DeliveryItem.objects.get(id=item_object['id'])
+#                     quantity = item_object['quantity']
+#                     print('quantity: ', quantity)
+#                     DeliveryTransactionItem.objects.create(
+#                         transaction=transaction,
+#                         item=item,
+#                         quantity=quantity
+#                     )
+#
+#                 return Response({
+#                     'message': 'Delivery transaction, items, and equipment created successfully',
+#                     'transaction_id': transaction.id,
+#                     # 'items': [{'id': i.id, 'quantity': i.quantity} for i in valid_items],
+#                     # 'equipment': [{'id': e.id, 'quantity': e.quantity} for e in valid_equipment]
+#                 }, status=status.HTTP_201_CREATED)
+#             else:
+#                 return Response(transaction_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         except Exception as e:
+#             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CreateDeliveryTransactionView(APIView):
     def post(self, request):
-        try:
-            delivery_transaction_data = request.data['transaction']
-            delivery_item_data = request.data.get('item')
+        print('in view')
+        serializer = DeliveryTransactionSerializer(data=request.data)
+        if serializer.is_valid():
+            print('is valid')
+            serializer.save()
+            return Response({
+                'message': 'Delivery transaction created successfully',
+                'transaction_id': serializer.data['id']
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-            if not delivery_transaction_data:
-                return Response({'error': 'Transaction data is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-            transaction_serializer = DeliveryTransactionSerializer(data=delivery_transaction_data)
-            if transaction_serializer.is_valid():
-                transaction = transaction_serializer.save()
+class AddDeliveryItemView(APIView):
+    def post(self, request):
+        serializer = DeliveryItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({
+                'message': 'Delivery item added successfully',
+                'item_id': serializer.data['id']
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-                if delivery_item_data:
-                    item_serializer = DeliveryItemSerializer(data=delivery_item_data)
-                    if item_serializer.is_valid():
-                        item = item_serializer.save(transaction=transaction)
-                        return Response({
-                            'message': 'Delivery transaction and item created successfully',
-                            'transaction_id': transaction.id,
-                            'item_id': item.id
-                        }, status=status.HTTP_201_CREATED)
-                    else:
-                        return Response(item_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-                else:
-                    return Response({'message': 'No item data provided'}, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                return Response(transaction_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except KeyError as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class GetDeliveryItemsView(APIView):
+    def get(self, request):
+        items = DeliveryItem.objects.all()
+        serializer = DeliveryItemSerializer(items, many=True)
+        return Response(serializer.data)

@@ -3,7 +3,7 @@ from enum import Enum
 
 class UserType(Enum):
     CUSTOMER = 'CUSTOMER'
-    DRIVER = ('DRIVER')
+    # DRIVER = ('DRIVER')
 
 
 class DriveType(Enum):
