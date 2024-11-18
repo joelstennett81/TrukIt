@@ -1,4 +1,6 @@
-
+.env
 *.xml
 *.pyc
 *.iml
+db.sqlite3
+*.sqlite3
