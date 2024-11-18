@@ -57,7 +57,7 @@ TEMPLATES = [
         },
     },
 ]
-
+print('hi'())
 WSGI_APPLICATION = 'app.wsgi.application'
 
 # Database
