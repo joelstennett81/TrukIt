@@ -153,7 +153,6 @@ class CustomerDashboardView(APIView):
 #                 for item_object in created_items_objects:
 #                     item = DeliveryItem.objects.get(id=item_object['id'])
 #                     quantity = item_object['quantity']
-#                     print('quantity: ', quantity)
 #                     DeliveryTransactionItem.objects.create(
 #                         transaction=transaction,
 #                         item=item,
@@ -174,19 +173,14 @@ class CustomerDashboardView(APIView):
 
 class CreateDeliveryTransactionView(APIView):
     def post(self, request):
-        print('in view')
         serializer = DeliveryTransactionSerializer(data=request.data, context={'request': request})
-        print('serializer: ', serializer)
 
         if serializer.is_valid():
-            print('is valid')
             serializer.save()
             return Response({
                 'message': 'Delivery transaction created successfully',
                 'transaction_id': serializer.data['id']
             }, status=status.HTTP_201_CREATED)
-        else:
-            print('errors: ', serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -212,14 +206,10 @@ class AddDeliveryItemView(APIView):
 class GetDeliveryCartItemsView(APIView):
     def get(self, request):
         transaction_id = request.query_params.get('transaction_id')
-        print('params: ', request.query_params)
-        print('trans id: ', transaction_id)
         if not transaction_id:
             return Response({"error": "Transaction ID is required"}, status=status.HTTP_400_BAD_REQUEST)
 
         items = DeliveryItem.objects.filter(delivery_transaction__id=transaction_id)
-        print('items: ', items)
         serializer = DeliveryItemSerializer(items, many=True)
-        print('data: ', serializer.data)
         return Response(serializer.data)
 

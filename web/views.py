@@ -33,7 +33,6 @@ def logout(request):
 
 
 def customer_dashboard(request):
-    print('user: ', request.user.is_superuser)
     return render(request, 'customer_dashboard.html')
 
 
@@ -96,7 +95,6 @@ def add_delivery_item(request):
         form = DeliveryItemForm(request.POST)
         if form.is_valid():
             item = form.save(commit=False)
-            print('transactionid: ', transaction_id)
             item.delivery_transaction = DeliveryTransaction.objects.get(id=transaction_id)
             item.save()
     else:

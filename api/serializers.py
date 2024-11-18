@@ -70,7 +70,6 @@ class DeliveryTransactionSerializer(serializers.ModelSerializer):
                   'driver', 'items']
 
     def create(self, validated_data):
-        print('validated data: ', validated_data)
         items_data = validated_data.pop('items', [])
         driver_data = validated_data.pop('driver', None)
         user_id = self.context['request'].user.id
