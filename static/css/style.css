@@ -1,0 +1,102 @@
+{
+%
+load
+static
+%
+}
+
+.navbar {
+    background-color: #000000;
+    margin-bottom: 10px;
+}
+
+.navbar-brand, .nav-link {
+    color: #ffffff !important;
+}
+
+.navbar-brand:hover, .nav-link:hover {
+    color: #ff8b03 !important;
+}
+
+.navbar-brand img {
+    max-height: 60px; /* Adjust the height as needed */
+}
+
+.hero {
+    background: url('{% static ' images/logo.png ' %}') no-repeat center center;
+    background-size: contain;
+    color: white;
+    padding: 100px 0;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 4em;
+    color: #f2391a;
+}
+
+.hero p {
+    font-size: 1.5em;
+    color: #ff8b03;
+}
+
+.btn-primary {
+    background-color: #f2391a;
+    border-color: #f2391a;
+}
+
+.btn-primary:hover {
+    background-color: #ff8b03;
+    border-color: #ff8b03;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-secondary:hover {
+    background-color: #495057;
+    border-color: #495057;
+}
+
+.btn-outline-primary {
+    color: #f2391a;
+    background-color: transparent;
+    border-color: #f2391a;
+}
+
+.btn-outline-secondary {
+    color: #6c757d;
+    background-color: transparent;
+    border-color: #6c757d;
+}
+
+.features h2 {
+    color: #f2391a;
+}
+
+.features .feature h3 {
+    color: #ff8b03;
+}
+
+footer {
+    background-color: #000000;
+    color: #ffffff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex-grow: 1;
+}
+
+.footer {
+    margin-top: auto;
+}

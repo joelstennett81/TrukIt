@@ -3,29 +3,28 @@
 {% block title %}Welcome to Truk-It{% endblock %}
 
 {% block content %}
-    <div class="container text-center my-5">
+    <div class="container text-center my-3">
         <h1>Welcome to Truk-It</h1>
         <p>Your trusted partner for delivering large items right to your doorstep.</p>
-        <a href="{% url 'web_register' %}" class="btn btn-primary btn-lg">Get Started</a>
     </div>
 
-    <div class="container features py-5">
-        <h2 class="text-center mb-4">Why Choose Truk-It?</h2>
+    <div class="container features py-3">
+        <h2 class="text-center mb-3">Why Choose Truk-It?</h2>
         <div class="row text-center">
-            <div class="col-md-4 feature mb-4">
-                <div class="p-4 border rounded">
+            <div class="col-md-4 feature mb-3">
+                <div class="p-2 border rounded">
                     <h3>Convenient</h3>
                     <p>Request a delivery from the comfort of your home and let our drivers handle the rest.</p>
                 </div>
             </div>
-            <div class="col-md-4 feature mb-4">
-                <div class="p-4 border rounded">
+            <div class="col-md-4 feature mb-3">
+                <div class="p-2 border rounded">
                     <h3>Reliable</h3>
                     <p>Our drivers are vetted and equipped to transport your items safely and efficiently.</p>
                 </div>
             </div>
-            <div class="col-md-4 feature mb-4">
-                <div class="p-4 border rounded">
+            <div class="col-md-4 feature mb-3">
+                <div class="p-2 border rounded">
                     <h3>Affordable</h3>
                     <p>Competitive pricing ensures you get the best value for your delivery needs.</p>
                 </div>
@@ -33,23 +32,34 @@
         </div>
     </div>
 
-    <div class="container mt-5 py-5">
-        <h2 class="text-center mb-4">How It Works</h2>
+    <div class="container mt-3 py-3">
+        <h2 class="text-center mb-3">How It Works</h2>
         <div class="row text-center">
-            <div class="col-md-4 mb-4">
-                <div class="p-4 border rounded">
+            <div class="col-md-4 mb-3">
+                <div class="p-2 border rounded">
                     <h4>1. Sign Up</h4>
                     <p>Create an account as a driver or customer to get started.</p>
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="p-4 border rounded">
-                    <h4>2. Request a Delivery</h4>
-                    <p>Customers can request a delivery for their large items from stores like Walmart.</p>
+            <div class="col-md-4 mb-3">
+                <div class="p-2 border rounded">
+                    <h4>2. Request Delivery </h4>
+                    <a href="https://forms.office.com/r/3C6GrR2N2V" class="btn btn-secondary btn-lg">Request</a>
+{#                    {% if user.is_authenticated %}#}
+{#                        {% if user.user_type == 'DRIVER' %}#}
+{#                            <a href="{% url 'web_driver_dashboard' %}" class="btn btn-primary btn-lg">Dashboard</a>#}
+{#                        {% elif user.user_type == 'CUSTOMER' %}#}
+{#                            <a href="{% url 'web_customer_dashboard' %}" class="btn btn-primary btn-lg">Dashboard</a>#}
+{#                        {% endif %}#}
+{#                    {% else %}#}
+{#                        <a href="{% url 'web_register' %}" class="btn btn-secondary btn-lg">Register</a>#}
+{#                        <a href="{% url 'web_login' %}" class="btn btn-secondary btn-lg">Login</a>#}
+{#                    {% endif %}#}
+
                 </div>
             </div>
-            <div class="col-md-4 mb-4">
-                <div class="p-4 border rounded">
+            <div class="col-md-4 mb-3">
+                <div class="p-2 border rounded">
                     <h4>3. Get It Delivered</h4>
                     <p>Our drivers will pick up and deliver your items right to your doorstep.</p>
                 </div>
