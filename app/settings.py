@@ -14,7 +14,7 @@ DATABASE_ENGINE = os.getenv('DATABASE_ENGINE')
 DATABASE_NAME = os.getenv('DATABASE_NAME')
 
 # Security settings
-ALLOWED_HOSTS = ['localhost','127.0.0.1', 'trukit.onrender.com']
+ALLOWED_HOSTS = ['localhost','127.0.0.1', 'trukit.onrender.com', 'truk-it-today.com', 'www.truk-it-today.com']
 
 # Application definition
 INSTALLED_APPS = [
