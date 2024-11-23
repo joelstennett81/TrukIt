@@ -1,69 +1,61 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Welcome to Truk-It{% endblock %}
 
 {% block content %}
-    <div class="container text-center my-3">
+    <div class="header">
+        <div class="logo-container">
+            <img src="{% static 'images/header.png' %}" alt="Truk-It Header" class="logo">
+        </div>
         <h1>Welcome to Truk-It</h1>
         <p>Your trusted partner for delivering large items right to your doorstep.</p>
+        <a href="https://forms.office.com/r/3C6GrR2N2V" target="_blank" class="btn btn-primary btn-lg">Request a
+            Delivery</a>
     </div>
 
-    <div class="container features py-3">
-        <h2 class="text-center mb-3">Why Choose Truk-It?</h2>
-        <div class="row text-center">
-            <div class="col-md-4 feature mb-3">
-                <div class="p-2 border rounded">
-                    <h3>Convenient</h3>
-                    <p>Request a delivery from the comfort of your home and let our drivers handle the rest.</p>
-                </div>
-            </div>
-            <div class="col-md-4 feature mb-3">
-                <div class="p-2 border rounded">
-                    <h3>Reliable</h3>
-                    <p>Our drivers are vetted and equipped to transport your items safely and efficiently.</p>
-                </div>
-            </div>
-            <div class="col-md-4 feature mb-3">
-                <div class="p-2 border rounded">
-                    <h3>Affordable</h3>
-                    <p>Competitive pricing ensures you get the best value for your delivery needs.</p>
-                </div>
-            </div>
+    <section class="why-choose">
+        <h2>Why Choose Truk-It?</h2>
+        <div class="card">
+            <h3>Convenient</h3>
+            <p>At Back-it-up, we make moving large items easy and stress-free. Our platform connects you with local
+                truck owners, allowing you to request a delivery from the comfort of your home. Whether it's a new
+                couch, a grill, or storage-bound belongings, our service ensures that your items are transported safely
+                and efficiently. No more struggling to find a truck or dealing with the hassle of traditional delivery
+                services.</p>
         </div>
-    </div>
-
-    <div class="container mt-3 py-3">
-        <h2 class="text-center mb-3">How It Works</h2>
-        <div class="row text-center">
-            <div class="col-md-4 mb-3">
-                <div class="p-2 border rounded">
-                    <h4>1. Sign Up</h4>
-                    <p>Create an account as a driver or customer to get started.</p>
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="p-2 border rounded">
-                    <h4>2. Request Delivery </h4>
-                    <a href="https://forms.office.com/r/3C6GrR2N2V" class="btn btn-secondary btn-lg">Request</a>
-{#                    {% if user.is_authenticated %}#}
-{#                        {% if user.user_type == 'DRIVER' %}#}
-{#                            <a href="{% url 'web_driver_dashboard' %}" class="btn btn-primary btn-lg">Dashboard</a>#}
-{#                        {% elif user.user_type == 'CUSTOMER' %}#}
-{#                            <a href="{% url 'web_customer_dashboard' %}" class="btn btn-primary btn-lg">Dashboard</a>#}
-{#                        {% endif %}#}
-{#                    {% else %}#}
-{#                        <a href="{% url 'web_register' %}" class="btn btn-secondary btn-lg">Register</a>#}
-{#                        <a href="{% url 'web_login' %}" class="btn btn-secondary btn-lg">Login</a>#}
-{#                    {% endif %}#}
-
-                </div>
-            </div>
-            <div class="col-md-4 mb-3">
-                <div class="p-2 border rounded">
-                    <h4>3. Get It Delivered</h4>
-                    <p>Our drivers will pick up and deliver your items right to your doorstep.</p>
-                </div>
-            </div>
+        <div class="card">
+            <h3>Prompt</h3>
+            <p>We understand the importance of timely deliveries. With Back-it-up, you can count on prompt service that
+                fits your schedule. Our network of dedicated truck owners is available 24/7, ready to pick up and
+                deliver your items when you need them. We prioritize quick response times and efficient transportation
+                to ensure your items arrive at their destination without delay.</p>
         </div>
-    </div>
+        <div class="card">
+            <h3>Affordable</h3>
+            <p>Moving large items shouldn't break the bank. Back-it-up offers competitive pricing that provides
+                excellent value for your delivery needs. By connecting directly with truck owners, we eliminate the
+                middleman, reducing costs and passing the savings on to you. Enjoy affordable rates without compromising
+                on quality or reliability.</p>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <h2>How It Works</h2>
+        <div class="step">
+            <h3>1. <a href="{% url 'web_login' %}">Sign Up</a></h3>
+            <p>Create an account as a driver or customer to get started. Users who sign up for an account will get a
+                coupon for savings on their first delivery</p>
+        </div>
+        <div class="step">
+            <h3>2. <a href="https://forms.office.com/r/3C6GrR2N2V" target="_blank">Request Delivery</a></h3>
+            <p>Fill out a form with your delivery details. We will review and contact you via phone or email regarding
+                next steps.</p>
+        </div>
+        <div class="step">
+            <h3>3. Receive Delivery</h3>
+            <p>We will reach out to you via phone or email to coordinate delivery, and will deliver to your home
+                ASAP</p>
+        </div>
+    </section>
 {% endblock %}
