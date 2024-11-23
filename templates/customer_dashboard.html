@@ -4,66 +4,64 @@
 
 {% block content %}
     <div class="container mt-5">
-        <h1 class="text-center">Customer Dashboard</h1>
         <div class="row">
-            <div class="col-md-4">
-                <div class="card mt-4">
+            <div class="col-md-12">
+                <h1 class="text-center">Customer Dashboard</h1>
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
                     <div class="card-header">
-                        <h2>Welcome, {{ user.first_name }} {{ user.last_name }}</h2>
+                        <h3>Welcome, {{ user.first_name }} {{ user.last_name }}</h3>
                     </div>
                     <div class="card-body">
-                        <p>Email: {{ user.email }}</p>
-                        <p>Phone Number: {{ user.phone_number }}</p>
-                        <p>Date of Birth: {{ user.date_of_birth }}</p>
-                        <p>Gender: {{ user.gender }}</p>
+                        <p><strong>Email:</strong> {{ user.email }}</p>
+                        <p><strong>Phone Number:</strong> {{ user.phone_number }}</p>
+                        <p><strong>Date of Birth:</strong> {{ user.date_of_birth }}</p>
+                        <p><strong>Gender:</strong> {{ user.gender }}</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card mt-4">
+            <div class="col-md-6">
+                <div class="card mb-4">
                     <div class="card-header">
-                        <h2>Contact Information</h2>
+                        <h3>Contact Information</h3>
                     </div>
                     <div class="card-body">
-                        <p>Mailing Address: {{ user.mailing_address }}</p>
-                        <p>City: {{ user.city }}</p>
-                        <p>State: {{ user.state }}</p>
-                        <p>Zip Code: {{ user.zip_code }}</p>
+                        <p><strong>Mailing Address:</strong> {{ user.mailing_address }}</p>
+                        <p><strong>City:</strong> {{ user.city }}</p>
+                        <p><strong>State:</strong> {{ user.state }}</p>
+                        <p><strong>Zip Code:</strong> {{ user.zip_code }}</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card mt-4">
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4">
                     <div class="card-header">
-                        <h2>Registration Details</h2>
+                        <h3>Registration Details</h3>
                     </div>
                     <div class="card-body">
-                        <p>Registered On: {{ user.registration_date }}</p>
-                        <p>User Type: {{ user.user_type }}</p>
+                        <p><strong>Registered On:</strong> {{ user.registration_date }}</p>
+                        <p><strong>User Type:</strong> {{ user.user_type }}</p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card mt-4">
+            <div class="col-md-6">
+                <div class="card mb-4">
                     <div class="card-header">
-                        <h2>Request Delivery</h2>
+                        <h3>Request Delivery</h3>
                     </div>
-                    <div class="card-body">
-                        <a href="https://forms.office.com/r/3C6GrR2N2V" class="btn btn-secondary btn-lg">Request</a>
+                    <div class="card-body text-center">
+                        <a href="https://forms.office.com/r/3C6GrR2N2V" target="_blank" class="btn btn-primary btn-lg">Request
+                            a
+                            Delivery</a>
                     </div>
                 </div>
             </div>
-            {#            <div class="col-md-4">#}
-            {#                <div class="card mt-4">#}
-            {#                    <div class="card-header">#}
-            {#                        <h2>Delivery History</h2>#}
-            {#                    </div>#}
-            {#                    <div class="card-body">#}
-            {#                        <a href="{% url 'web_customer_delivery_transactions' %}" class="btn btn-secondary">View Delivery#}
-            {#                            History</a>#}
-            {#                    </div>#}
-            {#                </div>#}
-            {#            </div>#}
         </div>
     </div>
 {% endblock %}

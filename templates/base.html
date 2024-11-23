@@ -25,6 +25,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'web_home' %}">Home</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="https://forms.office.com/r/3C6GrR2N2V" target="_blank">Request Delivery</a>
+            </li>
             {% if user.is_authenticated %}
                 {% if user.user_type == 'DRIVER' %}
                     <li class="nav-item">
