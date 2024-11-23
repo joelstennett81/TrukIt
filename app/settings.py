@@ -14,7 +14,7 @@ DATABASE_ENGINE = os.getenv('DATABASE_ENGINE')
 DATABASE_NAME = os.getenv('DATABASE_NAME')
 
 # Security settings
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost','127.0.0.1', 'trukit.onrender.com', 'truk-it-today.com', 'www.truk-it-today.com']
 
 # Application definition
 INSTALLED_APPS = [
@@ -38,6 +38,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'app.urls'
@@ -57,7 +58,6 @@ TEMPLATES = [
         },
     },
 ]
-
 WSGI_APPLICATION = 'app.wsgi.application'
 
 # Database
@@ -97,9 +97,8 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+STATIC_ROOT = BASE_DIR / "static"
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
